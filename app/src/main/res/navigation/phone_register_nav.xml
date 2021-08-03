@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/phone_register_nav"
+    app:startDestination="@id/phoneNumberFragment">
+
+    <fragment
+        android:id="@+id/phoneNumberFragment"
+        android:name="com.example.phoneAuth.PhoneNumberFragment"
+        android:label="fragment_phone_number"
+        tools:layout="@layout/fragment_phone_number" >
+        <action
+            android:id="@+id/action_phoneNumberFragment_to_SMSFragment"
+            app:destination="@id/SMSFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SMSFragment"
+        android:name="com.example.phoneAuth.SMSFragment"
+        android:label="fragment_s_m_s"
+        tools:layout="@layout/fragment_s_m_s" />
+</navigation>

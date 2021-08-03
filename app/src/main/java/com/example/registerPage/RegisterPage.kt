@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.activity.HomeActivity
+import com.example.activity.RegisterNavigationActivity
 import com.example.architecture.MyViewModel
 import com.example.isaffewrb.R
 import com.example.isaffewrb.databinding.ActivityRegisterPageBinding
@@ -45,6 +46,11 @@ class RegisterPage : AppCompatActivity(), MyFullScreen {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
 
+        binding.registerTv.setOnClickListener {
+
+            val intent = Intent(this, RegisterNavigationActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.signIn.setOnClickListener {
             signInWithEmail()
