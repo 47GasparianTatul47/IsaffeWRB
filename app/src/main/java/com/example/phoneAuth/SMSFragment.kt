@@ -39,11 +39,12 @@ class SMSFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val binding = FragmentSMSBinding.inflate(layoutInflater)
 
         val verificationID = arguments?.getString("verificationID")
 
-        binding.continueHomeActivityBtn.setOnClickListener {
+        binding.btnContinue.setOnClickListener {
 
             val code = binding.edtVerifyNumber.text
 

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.Model.Validation
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.FirebaseException
@@ -22,14 +23,14 @@ class MyViewModel : ViewModel() {
 
     private var PHONE_NUMBER = "77:93:94:95:96:97:98:41"
 
+    lateinit var firebaseAuth: FirebaseAuth
+
     private lateinit var countryCode: String
     private lateinit var userNumber: String
 
     val _userVerificationID = MutableLiveData<String>()
     val liveData: LiveData<String> = _userVerificationID
 
-
-    lateinit var firebaseAuth: FirebaseAuth
     val _idToken = MutableLiveData<String>()
     val idTokenliveData: LiveData<String> = _idToken
 
@@ -40,9 +41,6 @@ class MyViewModel : ViewModel() {
     fun phoneVerification(context: Context) {
 
         val separated = PHONE_NUMBER.split(":").toTypedArray()
-        separated[0] // this will contain "Fruit"
-        separated[1]
-
 
         if (userNumber.startsWith(separated[0]) ||
             userNumber.startsWith(separated[1]) ||
@@ -60,7 +58,6 @@ class MyViewModel : ViewModel() {
                 0,
                 TimeUnit.SECONDS,
                 context as Activity,
-
 
                 object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
@@ -96,24 +93,7 @@ class MyViewModel : ViewModel() {
 
     }
 
-    private fun firebaseAuthWithGoogle(
-        firebaseAuth: FirebaseAuth,
-        idToken: String,
-        context: Context
-    ) {
-
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        firebaseAuth.signInWithCredential(credential)
-            .addOnCompleteListener(context as Activity) { task ->
-                if (task.isSuccessful) {
-                    _idToken.postValue("1")
-                } else {
-                    Log.d("TAG", "onActivityResult: isFailure")
-                }
-            }
-    }
-
-    fun onActivityResult(
+    fun myOnActivityResult(
         context: Context,
         requestCode: Int,
         data: Intent?,
@@ -122,7 +102,6 @@ class MyViewModel : ViewModel() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-
         if (requestCode == RCG_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
@@ -130,26 +109,52 @@ class MyViewModel : ViewModel() {
                 firebaseAuthWithGoogle(firebaseAuth, account.idToken!!, context)
 
             } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
                 Log.w("hello", "Google sign in failed", e)
             }
         }
     }
 
+    private fun firebaseAuthWithGoogle(
+        firebaseAuth: FirebaseAuth,
+        idToken: String,
+        context: Context
+    ) {
+
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener(context as Activity) {
+                    task ->
+                if (task.isSuccessful) {
+                    _idToken.postValue("1")
+                } else {
+                    Log.d("TAG", "onActivityResult: isFailure")
+                }
+            }
+    }
+
     fun firebaseWithEmailAndPassword(context: Context, email: String, password: String) {
         firebaseAuth = FirebaseAuth.getInstance()
 
+      /*  val validation = Validation
+        validation.validateInput(email, password)
+
+*/
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(context, "Input your email and password", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Input your email and password",
+                Toast.LENGTH_SHORT).show()
 
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(context, "Input your email inValid", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Your email address is incorrect",
+                Toast.LENGTH_SHORT).show()
 
 
         } else if (password.length < 8) {
-            Toast.makeText(context, "Input your not 8 character", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Your password must be 8 letters long",
+                Toast.LENGTH_SHORT).show()
 
-        } else { firebaseAuth.createUserWithEmailAndPassword(email, password)
+        } else {
+            firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(context as Activity) { task ->
                     if (task.isSuccessful) {
                         verifySuccessMutableLiveData.postValue("1")

@@ -1,5 +1,6 @@
 package com.example.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -19,6 +20,7 @@ class HomeActivity : AppCompatActivity(), MyFullScreen {
     lateinit var mAuth: FirebaseAuth
     lateinit var googleSignInClient: GoogleSignInClient
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -47,10 +49,10 @@ class HomeActivity : AppCompatActivity(), MyFullScreen {
             .into(binding.profileImage);
 
 
-
         binding.signOut.setOnClickListener {
 
             googleSignInClient.signOut().addOnCompleteListener {
+                mAuth.signOut()
                 Toast.makeText(this, "Sign Out", Toast.LENGTH_SHORT).show()
 
                 val intent = Intent(this,RegisterPage::class.java)

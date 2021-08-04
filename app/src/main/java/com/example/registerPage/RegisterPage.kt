@@ -58,6 +58,7 @@ class RegisterPage : AppCompatActivity(), MyFullScreen {
 
         binding.signInWithGoogle.setOnClickListener {
             binding.signInWithGoogle.isClickable = false
+
             signInWithGoogle()
 
         }
@@ -69,7 +70,10 @@ class RegisterPage : AppCompatActivity(), MyFullScreen {
         val email = binding.emailLogin.text
         val password = binding.passwordLogin.text
 
-        myViewModel.firebaseWithEmailAndPassword(this, email.toString(), password.toString())
+        myViewModel.firebaseWithEmailAndPassword(this,
+            email.toString(), password.toString())
+
+
         myViewModel.verifySuccessLiveData.observe(this, {
             if (it == "1") {
                 val intent = Intent(this, HomeActivity::class.java)
@@ -109,8 +113,11 @@ class RegisterPage : AppCompatActivity(), MyFullScreen {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        myViewModel.onActivityResult(
-            this, requestCode, data,
+
+        myViewModel.myOnActivityResult(
+            this,
+            requestCode,
+            data,
             RC_SIGN_IN
         )
 

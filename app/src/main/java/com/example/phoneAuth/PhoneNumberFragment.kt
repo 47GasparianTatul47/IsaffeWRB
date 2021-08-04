@@ -77,17 +77,18 @@ class PhoneNumberFragment : Fragment() {
 
         binding.countryCodePicker.registerCarrierNumberEditText(binding.editTextPhone)
 
-        val getNumbers: String = binding.countryCodePicker.fullNumberWithPlus.replace(" ", "")
+        val getCountryCode: String = binding.countryCodePicker.fullNumberWithPlus.replace(" ", "")
 
         binding.continueBtn.setOnClickListener {
 
-            myViewModel.setUserNumber(binding.editTextPhone.text.toString(), getNumbers)
+            myViewModel.setUserNumber(binding.editTextPhone.text.toString(), getCountryCode)
 
             myViewModel.phoneVerification(context as Activity)
 
             myViewModel.liveData.observe(viewLifecycleOwner, {
 
                 val bundle = bundleOf("verificationID" to it)
+
                 Navigation.findNavController(binding.root)
                     .navigate(R.id.action_phoneNumberFragment_to_SMSFragment, bundle)
             })

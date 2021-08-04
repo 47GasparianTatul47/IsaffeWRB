@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(), MyFullScreen {
         val isafeTv = findViewById<TextView>(R.id.isaffe)
 
         mAuth = FirebaseAuth.getInstance()
+
         val user = mAuth.currentUser
 
         GlobalScope.launch(Dispatchers.IO) {
@@ -51,10 +52,14 @@ class MainActivity : AppCompatActivity(), MyFullScreen {
         }
 
         imageView.startAnimation(
-            AnimationUtils.loadAnimation(this, R.anim.fade_in_anim))
+            AnimationUtils.loadAnimation(this, R.anim.fade_in_anim)
+        )
         isafeTv.startAnimation(
-            AnimationUtils.loadAnimation(this, R.anim.fade_in_anim))
+            AnimationUtils.loadAnimation(this, R.anim.fade_in_anim)
+        )
 
 
     }
+
+
 }
